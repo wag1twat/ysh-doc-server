@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserOneDto, UserFindAllDto, UserFindOneDto } from './user.dto';
+import {
+  CreateUserOneDto,
+  DeleteUserOneDto,
+  UserFindAllDto,
+  UserFindOneDto,
+} from './user.dto';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { USER_DB_CONNECTION } from 'libs/constant';
-import { RpcQueryCatch } from 'libs/rpc.query-catch.decorator';
+import { DB_CONNECTION } from '@libs/constant';
+import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
+import { CredentialEntity } from '@libs/credential/credential.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity, USER_DB_CONNECTION)
+    @InjectRepository(UserEntity, DB_CONNECTION)
     private readonly repo: Repository<UserEntity>,
+    @InjectRepository(CredentialEntity, DB_CONNECTION)
+    private readonly c: Repository<CredentialEntity>,
   ) {
     console.log('UserService initialized');
   }
@@ -24,12 +32,21 @@ export class UserService {
   public findOne(dto: UserFindOneDto) {
     const { username } = dto;
 
-    return this.repo.findOne({ where: { username } });
+    return this.repo.findOne({
+      where: { username },
+    });
+  }
+
+  @RpcQueryCatch()
+  public deleteOne(dto: DeleteUserOneDto) {
+    const { id } = dto;
+
+    return this.repo.delete({ id });
   }
 
   @RpcQueryCatch()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public findAll(dto: UserFindAllDto) {
+  public async findAll(dto: UserFindAllDto) {
     return this.repo.find();
   }
 }

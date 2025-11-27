@@ -1,9 +1,6 @@
-export const USER_SERVICE = 'USER_SERVICE';
-export const AUTH_SERVICE = 'AUTH_SERVICE';
-export const ATTR_SERVICE = 'ATTR_SERVICE';
-export const DOC_SERVICE = 'DOC_SERVICE';
+export const USER_SERVICE = 'USER_SERVICE' as const;
+export const AUTH_SERVICE = 'AUTH_SERVICE' as const;
+export const ATTR_SERVICE = 'ATTR_SERVICE' as const;
+export const DOC_SERVICE = 'DOC_SERVICE' as const;
 
-export const USER_DB_CONNECTION = 'USER_DB_CONNECTION';
-export const CREDENTIAL_DB_CONNTECTION = 'CREDENTIAL_DB_CONNTECTION';
-export const ATTR_DB_CONNTECTION = 'ATTR_DB_CONNTECTION';
-export const DOC_DB_CONNTECTION = 'DOC_SERVICE';
+export const DB_CONNECTION = 'DB_CONNECTION' as const;

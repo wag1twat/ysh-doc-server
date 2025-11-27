@@ -1,12 +1,12 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'apps/user/src/user.service';
+import { UserService } from '@apps/user/src/user.service';
 import { AuthSignInDto, AuthSignUpDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from 'apps/user/src/user.entity';
-import { RpcQueryCatch } from 'libs/rpc.query-catch.decorator';
-import { CredentialService } from 'libs/credential/credential.service';
-import { ErrorFactory } from 'libs/error.factory';
+import { UserEntity } from '@apps/user/src/user.entity';
+import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
+import { CredentialService } from '@libs/credential/credential.service';
+import { ErrorFactory } from '@libs/error.factory';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +24,10 @@ export class AuthService {
 
     const user = await this.userService.createOne({ username: dto.username });
 
-    await this.credentialService.createOne({ id: user.id, hash });
+    await this.credentialService.createOne({
+      hash,
+      user,
+    });
 
     return user;
   }
@@ -54,9 +57,7 @@ export class AuthService {
   }
 
   private async verifyAsync(dto: AuthSignInDto, user: UserEntity) {
-    const credentials = await this.credentialService.findOne({
-      id: user.id,
-    });
+    const credentials = await this.credentialService.findOne({ user: user.id });
 
     if (!credentials) {
       throw ErrorFactory.rpc(HttpStatus.UNAUTHORIZED, 'Invalid credentials');

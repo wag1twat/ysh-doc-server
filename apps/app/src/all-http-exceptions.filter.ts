@@ -1,6 +1,6 @@
+import { ErrorFactory } from '@libs/error.factory';
 import { Catch, ExceptionFilter, ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
-import { ErrorFactory } from 'libs/error.factory';
 
 @Catch()
 export class AllHttpExceptionFilter implements ExceptionFilter {

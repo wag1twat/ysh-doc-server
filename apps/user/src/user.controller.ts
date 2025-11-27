@@ -2,7 +2,12 @@ import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserMessage } from './user.message';
-import { CreateUserOneDto, UserFindAllDto, UserFindOneDto } from './user.dto';
+import {
+  CreateUserOneDto,
+  DeleteUserOneDto,
+  UserFindAllDto,
+  UserFindOneDto,
+} from './user.dto';
 
 @Controller()
 export class UserController {
@@ -18,6 +23,11 @@ export class UserController {
   @MessagePattern(UserMessage.findOne)
   findOne(@Payload() dto: UserFindOneDto) {
     return this.userService.findOne(dto);
+  }
+
+  @MessagePattern(UserMessage.deleteOne)
+  deleteOne(@Payload() dto: DeleteUserOneDto) {
+    return this.userService.deleteOne(dto);
   }
 
   @MessagePattern(UserMessage.findAll)

@@ -1,19 +1,23 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { AttrFindAllDto, AttrFindOneDto } from 'apps/attr/src/attr.dto';
-import { AttrMessage } from 'apps/attr/src/attr.message';
-import { AuthSignInDto, AuthSignUpDto } from 'apps/auth/src/auth.dto';
-import { AuthMessage } from 'apps/auth/src/auth.message';
-import { DocFindAllDto, DocFindOneDto } from 'apps/doc/src/doc.dto';
-import { DocMessage } from 'apps/doc/src/doc.message';
+import { AttrFindAllDto, AttrFindOneDto } from '@apps/attr/src/attr.dto';
+import { AttrMessage } from '@apps/attr/src/attr.message';
+import { AuthSignInDto, AuthSignUpDto } from '@apps/auth/src/auth.dto';
+import { AuthMessage } from '@apps/auth/src/auth.message';
+import { DocFindAllDto, DocFindOneDto } from '@apps/doc/src/doc.dto';
+import { DocMessage } from '@apps/doc/src/doc.message';
+import {
+  DeleteUserOneDto,
+  UserFindAllDto,
+  UserFindOneDto,
+} from '@apps/user/src/user.dto';
+import { UserMessage } from '@apps/user/src/user.message';
 import {
   ATTR_SERVICE,
+  AUTH_SERVICE,
   DOC_SERVICE,
   USER_SERVICE,
-  AUTH_SERVICE,
-} from 'libs/constant';
-import { UserFindAllDto, UserFindOneDto } from 'apps/user/src/user.dto';
-import { UserMessage } from 'apps/user/src/user.message';
+} from '@libs/constant';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -35,6 +39,10 @@ export class AppService {
 
   getUser(dto: UserFindOneDto = { username: '' }) {
     return firstValueFrom(this.userClient.send(UserMessage.findOne, dto));
+  }
+
+  deleteUser(dto: DeleteUserOneDto) {
+    return firstValueFrom(this.userClient.send(UserMessage.deleteOne, dto));
   }
 
   getUsers(dto: UserFindAllDto = {}) {

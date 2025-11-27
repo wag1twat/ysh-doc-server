@@ -3,10 +3,13 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
-import { USER_DB_CONNECTION } from 'libs/constant';
+import { DB_CONNECTION } from '@libs/constant';
+import { CredentialEntity } from '@libs/credential/credential.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity], USER_DB_CONNECTION)],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, CredentialEntity], DB_CONNECTION),
+  ],
   controllers: [UserController],
   providers: [UserService],
 })

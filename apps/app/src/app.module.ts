@@ -1,42 +1,34 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { connectionSource } from '../db/data-source';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ATTR_SERVICE,
   AUTH_SERVICE,
-  CREDENTIAL_DB_CONNTECTION,
+  DB_CONNECTION,
   DOC_SERVICE,
-  USER_DB_CONNECTION,
   USER_SERVICE,
-} from 'libs/constant';
-import { UserModule } from 'apps/user/src/user.module';
-import { DocModule } from 'apps/doc/src/doc.module';
-import { AttrModule } from 'apps/attr/src/attr.module';
-import { AuthModule } from 'apps/auth/src/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { connectionUserSource } from '../db/data-source.user';
-import { connectionCredentialSource } from '../db/data-source.credential';
+} from '@libs/constant';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UserModule } from '@apps/user/src/user.module';
+import { AuthModule } from '@apps/auth/src/auth.module';
+import { AttrModule } from '@apps/attr/src/attr.module';
+import { DocModule } from '@apps/doc/src/doc.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [connectionUserSource, connectionCredentialSource],
+      load: [connectionSource],
     }),
     TypeOrmModule.forRootAsync({
-      name: USER_DB_CONNECTION,
+      name: DB_CONNECTION,
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
-        configService.get(USER_DB_CONNECTION)!,
-    }),
-    TypeOrmModule.forRootAsync({
-      name: CREDENTIAL_DB_CONNTECTION,
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        configService.get(CREDENTIAL_DB_CONNTECTION)!,
+        configService.get(DB_CONNECTION)!,
     }),
     ClientsModule.register([
       {

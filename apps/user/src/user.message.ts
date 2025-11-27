@@ -5,6 +5,10 @@ export class UserMessage {
     cmd: 'users.find.one',
   };
 
+  static deleteOne = {
+    cmd: 'users.delete.one',
+  };
+
   static findAll = {
     cmd: 'users.find.all',
   };

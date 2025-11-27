@@ -6,7 +6,7 @@ import { UserService } from 'apps/user/src/user.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'apps/user/src/user.entity';
-import { CREDENTIAL_DB_CONNTECTION, USER_DB_CONNECTION } from 'libs/constant';
+import { DB_CONNECTION } from 'libs/constant';
 import { CredentialEntity } from 'libs/credential/credential.entity';
 import { CredentialService } from 'libs/credential/credential.service';
 
@@ -20,8 +20,7 @@ import { CredentialService } from 'libs/credential/credential.service';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
-    TypeOrmModule.forFeature([UserEntity], USER_DB_CONNECTION),
-    TypeOrmModule.forFeature([CredentialEntity], CREDENTIAL_DB_CONNTECTION),
+    TypeOrmModule.forFeature([UserEntity, CredentialEntity], DB_CONNECTION),
   ],
   providers: [AuthService, UserService, CredentialService],
   controllers: [AuthController],

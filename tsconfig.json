@@ -15,8 +15,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "apps/*": ["apps/*"],
-      "libs/*": ["libs/*"]
+      "@apps/*": ["apps/*"],
+      "@libs/*": ["libs/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
@@ -30,7 +30,7 @@
     "apps/**/*",
     "src/**/*",
     "data-source.*.ts",
-    "apps/app/db/data-source.user.ts",
+    "apps/app/db/data-source.ts",
     "libs"
   ],
   "exclude": ["node_modules"]

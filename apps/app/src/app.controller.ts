@@ -1,16 +1,21 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UserFindAllDto, UserFindOneDto } from 'apps/user/src/user.dto';
-import { AuthSignInDto, AuthSignUpDto } from 'apps/auth/src/auth.dto';
-import { DocFindAllDto, DocFindOneDto } from 'apps/doc/src/doc.dto';
-import { AttrFindAllDto, AttrFindOneDto } from 'apps/attr/src/attr.dto';
+import { AuthSignInDto, AuthSignUpDto } from '@apps/auth/src/auth.dto';
+import {
+  DeleteUserOneDto,
+  UserFindAllDto,
+  UserFindOneDto,
+} from '@apps/user/src/user.dto';
+import { AttrFindAllDto, AttrFindOneDto } from '@apps/attr/src/attr.dto';
+import { DocFindAllDto, DocFindOneDto } from '@apps/doc/src/doc.dto';
 
 @Controller()
 export class AppController {
@@ -32,6 +37,11 @@ export class AppController {
   @Get('user')
   getUser(@Body() dto: UserFindOneDto) {
     return this.appService.getUser(dto);
+  }
+
+  @Delete('user')
+  deleteUser(@Body() dto: DeleteUserOneDto) {
+    return this.appService.deleteUser(dto);
   }
 
   // @UseGuards(AuthGuard)
