@@ -10,15 +10,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DB_CONNECTION } from '@libs/constant';
 import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
-import { CredentialEntity } from '@libs/credential/credential.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity, DB_CONNECTION)
     private readonly repo: Repository<UserEntity>,
-    @InjectRepository(CredentialEntity, DB_CONNECTION)
-    private readonly c: Repository<CredentialEntity>,
   ) {
     console.log('UserService initialized');
   }
