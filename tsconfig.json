@@ -26,6 +26,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["apps/**/*", "libs/**/*", "jest.*.ts", "commitlint.config.mts"],
+  "include": ["apps/**/*", "libs/**/*", "jest.*.ts", "commitlint.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
