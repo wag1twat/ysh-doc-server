@@ -5,6 +5,8 @@ import { registerAs } from '@nestjs/config';
 import { DB_CONNECTION } from '@libs/constant';
 import { UserEntity } from '@apps/user/src/user.entity';
 import { CredentialEntity } from '@libs/credential/credential.entity';
+import { AttrEntity } from '@apps/attr/src/entities/attr.entity';
+import { AttrGroupEntity } from '@apps/attr-group/src/entities/attr-group.entity';
 
 dotenvConfig({ path: '.env' });
 
@@ -16,7 +18,7 @@ const config: DataSourceOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  entities: [UserEntity, CredentialEntity],
+  entities: [UserEntity, CredentialEntity, AttrEntity, AttrGroupEntity],
   migrations: [path.join(__dirname, '/migrations/*.ts')],
   synchronize: false,
 };

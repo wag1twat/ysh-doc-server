@@ -27,7 +27,18 @@ async function bootstrap() {
     options: { host: 'localhost', port: 3004 },
   });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.TCP,
+    options: { host: 'localhost', port: 3005 },
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // удаляет поля не описанные в DTO
+      forbidNonWhitelisted: true, // выбрасывает ошибку при наличии лишних полей
+      transform: true, // преобразует типы данных
+    }),
+  );
   app.useGlobalFilters(new AllHttpExceptionFilter());
 
   await app.startAllMicroservices();

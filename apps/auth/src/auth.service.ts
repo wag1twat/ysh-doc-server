@@ -39,7 +39,10 @@ export class AuthService {
     let user = await this.userService.findOne({ username });
 
     if (!user) {
-      throw ErrorFactory.rpc(HttpStatus.UNAUTHORIZED, 'Invalid credentials');
+      throw ErrorFactory.rpc(
+        HttpStatus.UNAUTHORIZED,
+        ErrorFactory.messages.INVALID_CREDENTIALS,
+      );
     }
 
     user = await this.verifyAsync(dto, user);
@@ -60,13 +63,19 @@ export class AuthService {
     const credentials = await this.credentialService.findOne({ user: user.id });
 
     if (!credentials) {
-      throw ErrorFactory.rpc(HttpStatus.UNAUTHORIZED, 'Invalid credentials');
+      throw ErrorFactory.rpc(
+        HttpStatus.UNAUTHORIZED,
+        ErrorFactory.messages.INVALID_CREDENTIALS,
+      );
     }
 
     const match = await bcrypt.compare(dto.password, credentials.hash);
 
     if (!match) {
-      throw ErrorFactory.rpc(HttpStatus.UNAUTHORIZED, 'Invalid credentials');
+      throw ErrorFactory.rpc(
+        HttpStatus.UNAUTHORIZED,
+        ErrorFactory.messages.INVALID_CREDENTIALS,
+      );
     }
 
     return user;

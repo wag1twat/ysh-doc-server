@@ -1,26 +1,17 @@
-import { HttpException } from '@nestjs/common';
-import { isString } from 'es-toolkit';
-import { has, isNumber, isObject } from 'es-toolkit/compat';
+import { z } from 'zod/v4';
 
-interface RpcException {
-  status: number;
-  message: string;
-  error: string;
-  type: 'RPC';
-}
+const rpcException = z.object({
+  status: z.number(),
+  message: z.string(),
+  error: z.string(),
+  type: z.literal('RPC'),
+  timestamp: z.string(),
+});
+
+type RpcException = z.infer<typeof rpcException>;
 
 export const isRpcException = (arg: unknown): arg is RpcException => {
-  return (
-    isObject(arg) &&
-    !Array.isArray(arg) &&
-    has(arg, 'status') &&
-    isNumber(arg.status) &&
-    has(arg, 'message') &&
-    isString(arg.message) &&
-    has(arg, 'error') &&
-    isString(arg.error) &&
-    has(arg, 'type') &&
-    arg.type === 'RPC' &&
-    !(arg instanceof HttpException)
-  );
+  const { success } = rpcException.safeParse(arg);
+
+  return success;
 };

@@ -28,6 +28,15 @@
         "tsConfigPath": "apps/attr/tsconfig.app.json"
       }
     },
+    "attr-group": {
+      "type": "application",
+      "root": "apps/attr-group",
+      "entryFile": "main",
+      "sourceRoot": "apps/attr-group/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/attr-group/tsconfig.app.json"
+      }
+    },
     "auth": {
       "type": "application",
       "root": "apps/auth",

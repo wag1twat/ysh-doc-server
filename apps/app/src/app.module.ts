@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { connectionSource } from '../db/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
+  ATTR_GROUP_SERVICE,
   ATTR_SERVICE,
   AUTH_SERVICE,
   DB_CONNECTION,
@@ -16,6 +17,7 @@ import { AttrModule } from '@apps/attr/src/attr.module';
 import { DocModule } from '@apps/doc/src/doc.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AttrGroupModule } from '@apps/attr-group/src/attr-group.module';
 
 @Module({
   imports: [
@@ -47,6 +49,11 @@ import { AppService } from './app.service';
         options: { host: 'localhost', port: 3003 },
       },
       {
+        name: ATTR_GROUP_SERVICE,
+        transport: Transport.TCP,
+        options: { host: 'localhost', port: 3005 },
+      },
+      {
         name: AUTH_SERVICE,
         transport: Transport.TCP,
         options: { host: 'localhost', port: 3004 },
@@ -55,6 +62,7 @@ import { AppService } from './app.service';
     UserModule,
     AuthModule,
     AttrModule,
+    AttrGroupModule,
     DocModule,
   ],
   controllers: [AppController],

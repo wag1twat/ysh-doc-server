@@ -1,0 +1,31 @@
+import type { UserConfig } from '@commitlint/types';
+
+const config: UserConfig = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      [
+        'feat', // Новая функциональность
+        'fix', // Исправление бага
+        'docs', // Изменения в документации
+        'style', // Изменения, не влияющие на логику (форматирование)
+        'refactor', // Изменения кода без исправления бага или добавления фичи
+        'perf', // Изменения для улучшения производительности
+        'test', // Добавление или исправление тестов
+        'build', // Изменения в системе сборки
+        'ci', // Изменения в CI конфигурации
+        'chore', // Вспомогательные изменения
+        'revert', // Откат предыдущего коммита
+      ],
+    ],
+    'subject-case': [
+      2,
+      'never',
+      ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
+    ],
+  },
+};
+
+export default config;

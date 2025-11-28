@@ -1,4 +1,16 @@
-import { AttrFindAllDto, AttrFindOneDto } from '@apps/attr/src/attr.dto';
+import {
+  AttrGroupCreateOneDto,
+  AttrGroupDeleteOneDto,
+  AttrGroupFindAllDto,
+  AttrGroupFindOneDto,
+} from '@apps/attr-group/src/attr-group.dto';
+import { AttrGroupMessage } from '@apps/attr-group/src/attr-group.message';
+import {
+  AttrCreateOneDto,
+  AttrDeleteOneDto,
+  AttrFindAllDto,
+  AttrFindOneDto,
+} from '@apps/attr/src/attr.dto';
 import { AttrMessage } from '@apps/attr/src/attr.message';
 import { AuthSignInDto, AuthSignUpDto } from '@apps/auth/src/auth.dto';
 import { AuthMessage } from '@apps/auth/src/auth.message';
@@ -11,6 +23,7 @@ import {
 } from '@apps/user/src/user.dto';
 import { UserMessage } from '@apps/user/src/user.message';
 import {
+  ATTR_GROUP_SERVICE,
   ATTR_SERVICE,
   AUTH_SERVICE,
   DOC_SERVICE,
@@ -26,42 +39,78 @@ export class AppService {
     @Inject(USER_SERVICE) private readonly userClient: ClientProxy,
     @Inject(AUTH_SERVICE) private readonly authClient: ClientProxy,
     @Inject(ATTR_SERVICE) private readonly attrClient: ClientProxy,
+    @Inject(ATTR_GROUP_SERVICE) private readonly attrGroupClient: ClientProxy,
     @Inject(DOC_SERVICE) private readonly docClient: ClientProxy,
   ) {}
 
-  signUp(dto: AuthSignUpDto) {
+  public signUp(dto: AuthSignUpDto) {
     return firstValueFrom(this.authClient.send(AuthMessage.signUp, dto));
   }
 
-  signIn(dto: AuthSignInDto) {
+  public signIn(dto: AuthSignInDto) {
     return firstValueFrom(this.authClient.send(AuthMessage.signIn, dto));
   }
 
-  getUser(dto: UserFindOneDto = { username: '' }) {
+  /* USERS */
+  public getUser(dto: UserFindOneDto) {
     return firstValueFrom(this.userClient.send(UserMessage.findOne, dto));
   }
 
-  deleteUser(dto: DeleteUserOneDto) {
+  public deleteUser(dto: DeleteUserOneDto) {
     return firstValueFrom(this.userClient.send(UserMessage.deleteOne, dto));
   }
-
-  getUsers(dto: UserFindAllDto = {}) {
+  public getUsers(dto: UserFindAllDto) {
     return firstValueFrom(this.userClient.send(UserMessage.findAll, dto));
   }
 
-  getAttr(dto: AttrFindOneDto = {}) {
+  /* ATTRS */
+  public createAttr(dto: AttrCreateOneDto) {
+    return firstValueFrom(this.attrClient.send(AttrMessage.createOne, dto));
+  }
+
+  public getAttr(dto: AttrFindOneDto) {
     return firstValueFrom(this.attrClient.send(AttrMessage.findOne, dto));
   }
 
-  getAttrs(dto: AttrFindAllDto = {}) {
+  public deleteAttr(dto: AttrDeleteOneDto) {
+    return firstValueFrom(this.attrClient.send(AttrMessage.deleteOne, dto));
+  }
+
+  public getAttrs(dto: AttrFindAllDto) {
     return firstValueFrom(this.attrClient.send(AttrMessage.findAll, dto));
   }
 
-  getDoc(dto: DocFindOneDto = {}) {
+  /* ATTR GROUPS */
+  public createAttrGroup(dto: AttrGroupCreateOneDto) {
+    return firstValueFrom(
+      this.attrGroupClient.send(AttrGroupMessage.createOne, dto),
+    );
+  }
+
+  public getAttrGroup(dto: AttrGroupFindOneDto) {
+    return firstValueFrom(
+      this.attrGroupClient.send(AttrGroupMessage.findOne, dto),
+    );
+  }
+
+  public deleteAttrGroup(dto: AttrGroupDeleteOneDto) {
+    return firstValueFrom(
+      this.attrGroupClient.send(AttrGroupMessage.deleteOne, dto),
+    );
+  }
+
+  public getAttrsGroup(dto: AttrGroupFindAllDto) {
+    return firstValueFrom(
+      this.attrGroupClient.send(AttrGroupMessage.findAll, dto),
+    );
+  }
+
+  /* DOCS */
+  public getDoc(dto: DocFindOneDto) {
     return firstValueFrom(this.docClient.send(DocMessage.findOne, dto));
   }
 
-  getDocs(dto: DocFindAllDto = {}) {
+  public getDocs(dto: DocFindAllDto) {
     return firstValueFrom(this.docClient.send(DocMessage.findAll, dto));
   }
 }

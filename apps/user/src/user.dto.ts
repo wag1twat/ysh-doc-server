@@ -1,7 +1,14 @@
-import { IsString, IsUUID, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserOneDto {
   @IsString()
+  @MinLength(1)
   username: string;
 }
 
@@ -11,9 +18,19 @@ export class DeleteUserOneDto {
 }
 
 export class UserFindOneDto {
+  @IsOptional()
+  @IsUUID('4')
+  id?: string;
+
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  username: string;
+  username?: string;
 }
 
-export class UserFindAllDto {}
+export class UserFindAllDto {
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  ids?: string[];
+}

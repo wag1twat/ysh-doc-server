@@ -1,19 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { AttrFindAllDto, AttrFindOneDto } from './attr.dto';
+import {
+  AttrCreateOneDto,
+  AttrDeleteOneDto,
+  AttrFindAllDto,
+  AttrFindOneDto,
+} from './attr.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AttrEntity } from './entities/attr.entity';
+import { DB_CONNECTION } from '@libs/constant';
+import { Repository } from 'typeorm';
+import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
+import { AttrGroupEntity } from '@apps/attr-group/src/entities/attr-group.entity';
 
 @Injectable()
 export class AttrService {
-  constructor() {
+  constructor(
+    @InjectRepository(AttrEntity, DB_CONNECTION)
+    private readonly repo: Repository<AttrEntity>,
+    @InjectRepository(AttrGroupEntity, DB_CONNECTION)
+    private readonly repoGroup: Repository<AttrGroupEntity>,
+  ) {
     console.log('AttrService initialized');
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findOne(dto: AttrFindOneDto) {
-    return {};
+  @RpcQueryCatch()
+  public createOne(dto: AttrCreateOneDto) {
+    return this.repo.save(dto);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findAll(dto: AttrFindAllDto) {
-    return [];
+  @RpcQueryCatch()
+  public findOne(dto: AttrFindOneDto) {
+    const { id, name } = dto;
+
+    return this.repo.findOneOrFail({ where: { id, name } });
+  }
+
+  @RpcQueryCatch()
+  public async deleteOne(dto: AttrDeleteOneDto) {
+    const { id } = dto;
+
+    let groups = await this.repoGroup.find({
+      relations: ['attributes'],
+      where: { attributes: { id } },
+    });
+
+    groups = groups.map((group) => {
+      group.attributes = group.attributes.filter(
+        (attribute) => attribute.id !== id,
+      );
+      return { ...group };
+    });
+
+    await this.repoGroup.save(groups);
+
+    return this.repo.delete({ id });
+  }
+
+  @RpcQueryCatch()
+  public findAll(dto: AttrFindAllDto) {
+    return this.repo.find({ relations: ['groups'] });
   }
 }

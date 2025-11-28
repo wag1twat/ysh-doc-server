@@ -26,12 +26,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": [
-    "apps/**/*",
-    "src/**/*",
-    "data-source.*.ts",
-    "apps/app/db/data-source.ts",
-    "libs"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["apps/**/*", "libs/**/*", "jest.*.ts", "commitlint.config.mts"],
+  "exclude": ["node_modules", "dist"]
 }

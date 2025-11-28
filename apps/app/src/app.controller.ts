@@ -14,8 +14,19 @@ import {
   UserFindAllDto,
   UserFindOneDto,
 } from '@apps/user/src/user.dto';
-import { AttrFindAllDto, AttrFindOneDto } from '@apps/attr/src/attr.dto';
+import {
+  AttrCreateOneDto,
+  AttrDeleteOneDto,
+  AttrFindAllDto,
+  AttrFindOneDto,
+} from '@apps/attr/src/attr.dto';
 import { DocFindAllDto, DocFindOneDto } from '@apps/doc/src/doc.dto';
+import {
+  AttrGroupCreateOneDto,
+  AttrGroupDeleteOneDto,
+  AttrGroupFindAllDto,
+  AttrGroupFindOneDto,
+} from '@apps/attr-group/src/attr-group.dto';
 
 @Controller()
 export class AppController {
@@ -33,6 +44,7 @@ export class AppController {
     return this.appService.signIn(dto);
   }
 
+  /* USERS */
   // @UseGuards(AuthGuard)
   @Get('user')
   getUser(@Body() dto: UserFindOneDto) {
@@ -50,10 +62,23 @@ export class AppController {
     return this.appService.getUsers(dto);
   }
 
+  /* ATTRS */
+  // @UseGuards(AuthGuard)
+  @Post('attr')
+  createAttr(@Body() dto: AttrCreateOneDto) {
+    return this.appService.createAttr(dto);
+  }
+
   // @UseGuards(AuthGuard)
   @Get('attr')
   getAttr(@Body() dto: AttrFindOneDto) {
     return this.appService.getAttr(dto);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Delete('attr')
+  deleteAttr(@Body() dto: AttrDeleteOneDto) {
+    return this.appService.deleteAttr(dto);
   }
 
   // @UseGuards(AuthGuard)
@@ -62,6 +87,32 @@ export class AppController {
     return this.appService.getAttrs(dto);
   }
 
+  /* ATTRS GROUPS */
+  // @UseGuards(AuthGuard)
+  @Post('attr/group')
+  createAttrGroup(@Body() dto: AttrGroupCreateOneDto) {
+    return this.appService.createAttrGroup(dto);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Get('attr/group')
+  getAttrGroup(@Body() dto: AttrGroupFindOneDto) {
+    return this.appService.getAttrGroup(dto);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Delete('attr/group')
+  deleteAttrGroup(@Body() dto: AttrGroupDeleteOneDto) {
+    return this.appService.deleteAttrGroup(dto);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Get('attrs/groups')
+  getAttrsGroup(@Body() dto: AttrGroupFindAllDto) {
+    return this.appService.getAttrsGroup(dto);
+  }
+
+  /* DOCS */
   // @UseGuards(AuthGuard)
   @Get('doc')
   getDoc(@Body() dto: DocFindOneDto) {

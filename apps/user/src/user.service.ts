@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   CreateUserOneDto,
   DeleteUserOneDto,
@@ -7,9 +7,11 @@ import {
 } from './user.dto';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { DB_CONNECTION } from '@libs/constant';
 import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
+import { atLeastOne } from '@libs/atLeastOne';
+import { ErrorFactory } from '@libs/error.factory';
 
 @Injectable()
 export class UserService {
@@ -21,16 +23,24 @@ export class UserService {
   }
 
   @RpcQueryCatch()
-  public createOne(dto: CreateUserOneDto) {
-    return this.repo.save(dto);
+  public async createOne(dto: CreateUserOneDto) {
+    const user = this.repo.create(dto);
+    return await this.repo.save(user);
   }
 
   @RpcQueryCatch()
   public findOne(dto: UserFindOneDto) {
-    const { username } = dto;
+    if (!atLeastOne(dto, ['id', 'username'])) {
+      throw ErrorFactory.rpc(
+        HttpStatus.BAD_REQUEST,
+        ErrorFactory.messages.EMPTY_BODY,
+      );
+    }
 
-    return this.repo.findOne({
-      where: { username },
+    const { username, id } = dto;
+
+    return this.repo.findOneOrFail({
+      where: { id, username },
     });
   }
 
@@ -42,8 +52,15 @@ export class UserService {
   }
 
   @RpcQueryCatch()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async findAll(dto: UserFindAllDto) {
-    return this.repo.find();
+  public findAll(dto: UserFindAllDto) {
+    const { ids } = dto;
+
+    const where: FindOptionsWhere<UserEntity> = {};
+
+    if (ids && ids.length) {
+      where.id = In(ids);
+    }
+
+    return this.repo.find({ where });
   }
 }

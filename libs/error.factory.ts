@@ -49,6 +49,11 @@ export class ErrorFactory {
     511: 'Network Authentication Required',
   };
 
+  static messages = {
+    INVALID_CREDENTIALS: 'Invalid credentials',
+    EMPTY_BODY: 'Empty body',
+  };
+
   static switchTo(error: unknown, type: 'HTTP'): HttpException;
   static switchTo(error: unknown, type: 'RPC'): RpcException;
   static switchTo(
@@ -74,6 +79,8 @@ export class ErrorFactory {
     if (error instanceof RpcException) {
       const ex = error.getError();
 
+      console.log(ex);
+
       if (isRpcException(ex)) {
         response.status = ex.status;
         response.message = ex.message;
@@ -86,6 +93,7 @@ export class ErrorFactory {
       response.message = error.message;
       return ret();
     }
+
     if (error instanceof QueryFailedError) {
       response.status = HttpStatus.BAD_REQUEST;
       response.message =
