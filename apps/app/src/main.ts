@@ -4,6 +4,11 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { AllHttpExceptionFilter } from './all-http-exceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { authSwagger } from '@apps/auth/src/auth.swagger';
+import { userSwagger } from '@apps/user/src/user.swagger';
+import { attrSwagger } from '@apps/attr/src/attr.swagger';
+import { attrGroupSwagger } from '@apps/attr-group/src/attr-group.swagger';
+import { docSwagger } from '@apps/doc/src/doc.swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -48,11 +53,11 @@ async function bootstrap() {
     .setTitle('TURBO DOC')
     .setDescription('API')
     .setVersion('1.0')
-    .addTag('auth')
-    .addTag('users')
-    .addTag('attrs')
-    .addTag('attrs-groups')
-    .addTag('docs')
+    .addTag(authSwagger.tag)
+    .addTag(userSwagger.tag)
+    .addTag(attrSwagger.tag)
+    .addTag(attrGroupSwagger.tag)
+    .addTag(docSwagger.tag)
     .addBearerAuth()
     .build();
 
