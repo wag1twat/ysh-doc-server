@@ -25,7 +25,8 @@
     "migration:generate": "pnpm typeorm migration:generate -d ./apps/app/db/data-source.ts ./apps/app/db/migrations/latest",
     "migration:create": "pnpm typeorm migration:create ./apps/app/db/migrations/latest",
     "migration:revert": "pnpm typeorm migration:revert -d ./apps/app/db/data-source.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "commit": "cz"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
