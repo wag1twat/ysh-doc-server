@@ -6,7 +6,13 @@ async function bootstrap() {
   try {
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(
       AttrGroupModule,
-      { transport: Transport.TCP, options: { host: 'localhost', port: 3005 } },
+      {
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: +process.env.ATTR_GROUP_SERVICE_PORT!,
+        },
+      },
     );
 
     await app.listen();

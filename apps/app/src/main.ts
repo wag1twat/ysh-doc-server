@@ -10,27 +10,27 @@ async function bootstrap() {
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { host: 'localhost', port: 3001 },
+    options: { host: 'localhost', port: +process.env.AUTH_SERVICE_PORT! },
   });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { host: 'localhost', port: 3002 },
+    options: { host: 'localhost', port: +process.env.DOC_SERVICE_PORT! },
   });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { host: 'localhost', port: 3003 },
+    options: { host: 'localhost', port: +process.env.ATTR_SERVICE_PORT! },
   });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { host: 'localhost', port: 3004 },
+    options: { host: 'localhost', port: +process.env.ATTR_GROUP_SERVICE_PORT! },
   });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { host: 'localhost', port: 3005 },
+    options: { host: 'localhost', port: +process.env.USER_SERVICE_PORT! },
   });
 
   app.useGlobalPipes(
@@ -62,7 +62,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.APP_SERVICE_PORT!);
 }
 
 void bootstrap();
