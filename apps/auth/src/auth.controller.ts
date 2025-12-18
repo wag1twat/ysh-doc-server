@@ -3,7 +3,9 @@ import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthSignInDto, AuthSignUpDto } from './auth.dto';
 import { AuthMessage } from './auth.message';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

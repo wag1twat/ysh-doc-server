@@ -7,7 +7,7 @@ import {
 } from './attr-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DB_CONNECTION } from '@libs/constant';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
 import { AttrGroupEntity } from './entities/attr-group.entity';
 
@@ -49,8 +49,14 @@ export class AttrGroupService {
 
   @RpcQueryCatch()
   public findAll(dto: AttrGroupFindAllDto) {
-    return this.repo.find({
-      relations: ['attributes'],
-    });
+    const { ids } = dto;
+
+    const where: FindOptionsWhere<AttrGroupEntity> = {};
+
+    if (ids && ids.length) {
+      where.id = In(ids);
+    }
+
+    return this.repo.find({ where, relations: ['attributes'] });
   }
 }

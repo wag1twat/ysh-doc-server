@@ -2,14 +2,15 @@ import type { Config } from 'jest';
 
 const config: Config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  transform: {
-    '^.+\\.(t|j)s$': 'ts-jest',
-  },
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
-    },
+  transform: {
+    '^.+\\.(t|j)s$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.json',
+        diagnostics: true,
+      },
+    ],
   },
   moduleNameMapper: {
     '^@apps(|/.*)$': '<rootDir>/apps/$1',

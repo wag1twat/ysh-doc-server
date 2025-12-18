@@ -3,10 +3,10 @@ import { AttrService } from './attr.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AttrMessage } from './attr.message';
 import {
-  AttrCreateOneDto,
-  AttrDeleteOneDto,
-  AttrFindAllDto,
-  AttrFindOneDto,
+  CreateOneAttrDTO,
+  DeleteOneAttrDTO,
+  FindAllAttrDTO,
+  FindOneAttrDTO,
 } from './attr.dto';
 
 @Controller()
@@ -16,22 +16,22 @@ export class AttrController {
   }
 
   @MessagePattern(AttrMessage.createOne)
-  createOne(@Payload() dto: AttrCreateOneDto) {
+  public createOne(@Payload() dto: CreateOneAttrDTO) {
     return this.attrService.createOne(dto);
   }
 
   @MessagePattern(AttrMessage.findOne)
-  findOne(@Payload() dto: AttrFindOneDto) {
+  public findOne(@Payload() dto: FindOneAttrDTO) {
     return this.attrService.findOne(dto);
   }
 
   @MessagePattern(AttrMessage.deleteOne)
-  deleteOne(@Payload() dto: AttrDeleteOneDto) {
+  public deleteOne(@Payload() dto: DeleteOneAttrDTO) {
     return this.attrService.deleteOne(dto);
   }
 
   @MessagePattern(AttrMessage.findAll)
-  findAll(@Payload() dto: AttrFindAllDto) {
+  public findAll(@Payload() dto: FindAllAttrDTO) {
     return this.attrService.findAll(dto);
   }
 }

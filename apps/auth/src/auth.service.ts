@@ -1,12 +1,16 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@apps/user/src/user.service';
-import { AuthSignInDto, AuthSignUpDto } from './auth.dto';
+import {
+  AuthSignInDto,
+  AuthSignInResponseDto,
+  AuthSignUpDto,
+} from './auth.dto';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from '@apps/user/src/user.entity';
 import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
 import { CredentialService } from '@libs/credential/credential.service';
 import { ErrorFactory } from '@libs/error.factory';
+import { UserDTO } from '@apps/user/src/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +21,7 @@ export class AuthService {
   ) {}
 
   @RpcQueryCatch()
-  async signUp(dto: AuthSignUpDto) {
+  async signUp(dto: AuthSignUpDto): Promise<UserDTO> {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(dto.password, salt);
@@ -33,7 +37,7 @@ export class AuthService {
   }
 
   @RpcQueryCatch()
-  async signIn(dto: AuthSignInDto): Promise<{ access_token: string }> {
+  async signIn(dto: AuthSignInDto): Promise<AuthSignInResponseDto> {
     const { username } = dto;
 
     let user = await this.userService.findOne({ username });
@@ -59,7 +63,7 @@ export class AuthService {
     };
   }
 
-  private async verifyAsync(dto: AuthSignInDto, user: UserEntity) {
+  private async verifyAsync(dto: AuthSignInDto, user: UserDTO) {
     const credentials = await this.credentialService.findOne({ user: user.id });
 
     if (!credentials) {

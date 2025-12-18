@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { AllHttpExceptionFilter } from './all-http-exceptions.filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,6 +43,24 @@ async function bootstrap() {
   app.useGlobalFilters(new AllHttpExceptionFilter());
 
   await app.startAllMicroservices();
+
+  const config = new DocumentBuilder()
+    .setTitle('TURBO DOC')
+    .setDescription('API')
+    .setVersion('1.0')
+    .addTag('auth')
+    .addTag('users')
+    .addTag('attrs')
+    .addTag('attrs-groups')
+    .addTag('docs')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config, {
+    autoTagControllers: false,
+  });
+
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }

@@ -6,10 +6,10 @@ import {
 } from '@apps/attr-group/src/attr-group.dto';
 import { AttrGroupMessage } from '@apps/attr-group/src/attr-group.message';
 import {
-  AttrCreateOneDto,
-  AttrDeleteOneDto,
-  AttrFindAllDto,
-  AttrFindOneDto,
+  CreateOneAttrDTO,
+  DeleteOneAttrDTO,
+  FindAllAttrDTO,
+  FindOneAttrDTO,
 } from '@apps/attr/src/attr.dto';
 import { AttrMessage } from '@apps/attr/src/attr.message';
 import { AuthSignInDto, AuthSignUpDto } from '@apps/auth/src/auth.dto';
@@ -17,9 +17,9 @@ import { AuthMessage } from '@apps/auth/src/auth.message';
 import { DocFindAllDto, DocFindOneDto } from '@apps/doc/src/doc.dto';
 import { DocMessage } from '@apps/doc/src/doc.message';
 import {
-  DeleteUserOneDto,
-  UserFindAllDto,
-  UserFindOneDto,
+  DeleteOneUserDTO,
+  FindAllUserDTO,
+  FindOneUserDTO,
 } from '@apps/user/src/user.dto';
 import { UserMessage } from '@apps/user/src/user.message';
 import {
@@ -43,6 +43,7 @@ export class AppService {
     @Inject(DOC_SERVICE) private readonly docClient: ClientProxy,
   ) {}
 
+  /* AUTH */
   public signUp(dto: AuthSignUpDto) {
     return firstValueFrom(this.authClient.send(AuthMessage.signUp, dto));
   }
@@ -52,31 +53,31 @@ export class AppService {
   }
 
   /* USERS */
-  public getUser(dto: UserFindOneDto) {
+  public getUser(dto: FindOneUserDTO) {
     return firstValueFrom(this.userClient.send(UserMessage.findOne, dto));
   }
 
-  public deleteUser(dto: DeleteUserOneDto) {
+  public deleteUser(dto: DeleteOneUserDTO) {
     return firstValueFrom(this.userClient.send(UserMessage.deleteOne, dto));
   }
-  public getUsers(dto: UserFindAllDto) {
+  public getUsers(dto: FindAllUserDTO) {
     return firstValueFrom(this.userClient.send(UserMessage.findAll, dto));
   }
 
   /* ATTRS */
-  public createAttr(dto: AttrCreateOneDto) {
+  public createAttr(dto: CreateOneAttrDTO) {
     return firstValueFrom(this.attrClient.send(AttrMessage.createOne, dto));
   }
 
-  public getAttr(dto: AttrFindOneDto) {
+  public getAttr(dto: FindOneAttrDTO) {
     return firstValueFrom(this.attrClient.send(AttrMessage.findOne, dto));
   }
 
-  public deleteAttr(dto: AttrDeleteOneDto) {
+  public deleteAttr(dto: DeleteOneAttrDTO) {
     return firstValueFrom(this.attrClient.send(AttrMessage.deleteOne, dto));
   }
 
-  public getAttrs(dto: AttrFindAllDto) {
+  public getAttrs(dto: FindAllAttrDTO) {
     return firstValueFrom(this.attrClient.send(AttrMessage.findAll, dto));
   }
 

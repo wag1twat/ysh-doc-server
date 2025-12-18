@@ -1,9 +1,10 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
-  CreateUserOneDto,
-  DeleteUserOneDto,
-  UserFindAllDto,
-  UserFindOneDto,
+  CreateOneUserDTO,
+  DeleteOneUserDTO,
+  FindAllUserDTO,
+  FindOneUserDTO,
+  UserDTO,
 } from './user.dto';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +13,7 @@ import { DB_CONNECTION } from '@libs/constant';
 import { RpcQueryCatch } from '@libs/rpc.query-catch.decorator';
 import { atLeastOne } from '@libs/atLeastOne';
 import { ErrorFactory } from '@libs/error.factory';
+import { DeleteEntityResponseDTO } from '@libs/base.dto';
 
 @Injectable()
 export class UserService {
@@ -23,13 +25,16 @@ export class UserService {
   }
 
   @RpcQueryCatch()
-  public async createOne(dto: CreateUserOneDto) {
-    const user = this.repo.create(dto);
-    return await this.repo.save(user);
+  public async createOne(dto: CreateOneUserDTO): Promise<UserDTO> {
+    let user = this.repo.create(dto);
+
+    user = await this.repo.save(user);
+
+    return await this.findOne({ id: user.id });
   }
 
   @RpcQueryCatch()
-  public findOne(dto: UserFindOneDto) {
+  public findOne(dto: FindOneUserDTO): Promise<UserDTO> {
     if (!atLeastOne(dto, ['id', 'username'])) {
       throw ErrorFactory.rpc(
         HttpStatus.BAD_REQUEST,
@@ -41,18 +46,19 @@ export class UserService {
 
     return this.repo.findOneOrFail({
       where: { id, username },
+      select: ['id', 'username'],
     });
   }
 
   @RpcQueryCatch()
-  public deleteOne(dto: DeleteUserOneDto) {
+  public deleteOne(dto: DeleteOneUserDTO): Promise<DeleteEntityResponseDTO> {
     const { id } = dto;
 
     return this.repo.delete({ id });
   }
 
   @RpcQueryCatch()
-  public findAll(dto: UserFindAllDto) {
+  public findAll(dto: FindAllUserDTO): Promise<UserDTO[]> {
     const { ids } = dto;
 
     const where: FindOptionsWhere<UserEntity> = {};
@@ -61,6 +67,6 @@ export class UserService {
       where.id = In(ids);
     }
 
-    return this.repo.find({ where });
+    return this.repo.find({ where, select: ['id', 'username'] });
   }
 }

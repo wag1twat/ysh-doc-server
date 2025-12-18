@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import {
-  AttrCreateOneDto,
-  AttrDeleteOneDto,
-  AttrFindAllDto,
-  AttrFindOneDto,
+  CreateOneAttrDTO,
+  DeleteOneAttrDTO,
+  FindAllAttrDTO,
+  FindOneAttrDTO,
 } from './attr.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AttrEntity } from './entities/attr.entity';
@@ -23,19 +23,19 @@ export class AttrService {
     console.log('AttrService initialized');
   }
   @RpcQueryCatch()
-  public createOne(dto: AttrCreateOneDto) {
+  public createOne(dto: CreateOneAttrDTO) {
     return this.repo.save(dto);
   }
 
   @RpcQueryCatch()
-  public findOne(dto: AttrFindOneDto) {
+  public findOne(dto: FindOneAttrDTO) {
     const { id, name } = dto;
 
     return this.repo.findOneOrFail({ where: { id, name } });
   }
 
   @RpcQueryCatch()
-  public async deleteOne(dto: AttrDeleteOneDto) {
+  public async deleteOne(dto: DeleteOneAttrDTO) {
     const { id } = dto;
 
     let groups = await this.repoGroup.find({
@@ -56,7 +56,7 @@ export class AttrService {
   }
 
   @RpcQueryCatch()
-  public findAll(dto: AttrFindAllDto) {
+  public findAll(dto: FindAllAttrDTO) {
     return this.repo.find({ relations: ['groups'] });
   }
 }

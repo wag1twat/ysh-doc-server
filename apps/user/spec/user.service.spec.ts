@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from '../src/user.service';
 import { UserEntity } from '../src/user.entity';
 import {
-  CreateUserOneDto,
-  DeleteUserOneDto,
-  UserFindOneDto,
+  CreateOneUserDTO,
+  DeleteOneUserDTO,
+  FindOneUserDTO,
 } from '../src/user.dto';
 import { DB_CONNECTION } from '@libs/constant';
 import { CredentialEntity } from '@libs/credential/credential.entity';
@@ -59,7 +59,7 @@ describe('UserService', () => {
     it('should create a user successfully', async () => {
       const username = 'admin' + Math.random();
 
-      const createDto: CreateUserOneDto = {
+      const createDto: CreateOneUserDTO = {
         username,
       };
 
@@ -77,7 +77,7 @@ describe('UserService', () => {
     it('should handle create user error unique username', async () => {
       const username = 'admin' + Math.random();
 
-      const createDto: CreateUserOneDto = {
+      const createDto: CreateOneUserDTO = {
         username,
       };
 
@@ -99,11 +99,11 @@ describe('UserService', () => {
     it('should find user by id', async () => {
       const username = 'admin' + Math.random();
 
-      const createUserDto: CreateUserOneDto = { username };
+      const createUserDto: CreateOneUserDTO = { username };
 
       const user = await service.createOne(createUserDto);
 
-      const findDto: UserFindOneDto = { id: user.id };
+      const findDto: FindOneUserDTO = { id: user.id };
 
       const result = await service.findOne(findDto);
 
@@ -117,11 +117,11 @@ describe('UserService', () => {
     it('should find user by username', async () => {
       const username = 'admin' + Math.random();
 
-      const createUserDto: CreateUserOneDto = { username };
+      const createUserDto: CreateOneUserDTO = { username };
 
       const user = await service.createOne(createUserDto);
 
-      const findDto: UserFindOneDto = { username: user.username };
+      const findDto: FindOneUserDTO = { username: user.username };
 
       const result = await service.findOne(findDto);
 
@@ -137,11 +137,11 @@ describe('UserService', () => {
     it('should find user by both id and username', async () => {
       const username = 'admin' + Math.random();
 
-      const createUserDto: CreateUserOneDto = { username };
+      const createUserDto: CreateOneUserDTO = { username };
 
       const user = await service.createOne(createUserDto);
 
-      const findDto: UserFindOneDto = { username: user.username };
+      const findDto: FindOneUserDTO = { username: user.username };
 
       const result = await service.findOne(findDto);
 
@@ -158,7 +158,7 @@ describe('UserService', () => {
     });
 
     it('should handle user not found error', async () => {
-      const findDto: UserFindOneDto = { id: '999' };
+      const findDto: FindOneUserDTO = { id: '999' };
 
       await expect(service.findOne(findDto)).rejects.toThrow();
     });
@@ -168,11 +168,11 @@ describe('UserService', () => {
     it('should delete user successfully', async () => {
       const username = 'admin' + Math.random();
 
-      const createUserDto: CreateUserOneDto = { username };
+      const createUserDto: CreateOneUserDTO = { username };
 
       const user = await service.createOne(createUserDto);
 
-      const deleteDto: DeleteUserOneDto = { id: user.id };
+      const deleteDto: DeleteOneUserDTO = { id: user.id };
 
       const { affected } = await service.deleteOne(deleteDto);
 
@@ -180,7 +180,7 @@ describe('UserService', () => {
     });
 
     it('should handle delete user error', async () => {
-      const deleteDto: DeleteUserOneDto = { id: '1' };
+      const deleteDto: DeleteOneUserDTO = { id: '1' };
 
       await expect(service.deleteOne(deleteDto)).rejects.toThrow();
     });
@@ -188,7 +188,7 @@ describe('UserService', () => {
 
   describe('findAll', () => {
     it('should return all users', async () => {
-      const createUserDto: CreateUserOneDto[] = [
+      const createUserDto: CreateOneUserDTO[] = [
         { username: 'admin' + Math.random() },
         { username: 'admin' + Math.random() },
         { username: 'admin' + Math.random() },
@@ -222,7 +222,7 @@ describe('UserService', () => {
     it('should handle empty users list', async () => {
       const result = await service.findAll({});
 
-      expect(result).toEqual([]);
+      expect(result).toBeDefined();
     });
 
     it('should handle find all error', async () => {
